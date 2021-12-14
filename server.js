@@ -39,8 +39,6 @@ mongoose.connect(DB, {
 app.use('/post', postRoutes)
 app.use('/user', userRoutes)
 
-app.get('/', (req, res) => res.status(200).send('Is maths related to science?!!'))
-
 app.use(express.static(path.join(__dirname, "client", "build")))
 
 app.get("*", (req, res) => {
