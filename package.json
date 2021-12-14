@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npx hardhat compile && npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -23,5 +23,5 @@
   },
   "engines": {
     "node": "14.17.6"
-  }
+}
 }
