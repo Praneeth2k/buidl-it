@@ -10,6 +10,8 @@ import path from "path"
 import postRoutes from "./routes/postRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 
+const __dirname = path.resolve()
+
 const app = express();
 
 dotenv.config({path: './config.env'})
