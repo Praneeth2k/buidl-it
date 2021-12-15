@@ -5,13 +5,14 @@ const updateData = async () => {
     const likes = Math.floor(Math.random() * 10);
     const views = Math.floor(likes + Math.random() * 10);
     var u = {"revenueGenerated": {}}
-    await Post.updateMany({}, { $inc: { 'views':views, 'likes': likes, 'totalRevenue': 10 } })
+    const amount = 2 * likes + views
+
+    await Post.updateMany({}, { $inc: { 'views':views, 'likes': likes, 'totalRevenue': amount } })
 
     const posts = await Post.find()
 
     posts.forEach(async(post) => {
 
-        const amount = 2 * likes + views
         const originalSellerShare = amount * (100 - post.revenueShare) / 100
         const ownerShare = amount - originalSellerShare
         const originalSeller = post.originalSeller
@@ -21,14 +22,11 @@ const updateData = async () => {
 
         const updatedRevenueGenerated = {}
         
-        console.log(revenueGenerated.get(originalSeller))
-
         if(revenueGenerated.get(originalSeller)) {
             updatedRevenueGenerated[originalSeller] = revenueGenerated.get(originalSeller) + originalSellerShare
         } else {
             updatedRevenueGenerated[originalSeller] = originalSellerShare
         }
-        console.log(revenueGenerated.get(currentOwner))
         if(revenueGenerated.get(currentOwner)) {
             if(currentOwner === originalSeller){
                 updatedRevenueGenerated[currentOwner] += ownerShare 
@@ -42,10 +40,6 @@ const updateData = async () => {
             updatedRevenueGenerated[currentOwner] = ownerShare
             }
         }
-
-        console.log(updatedRevenueGenerated)
-
-
 
         
         await Post.updateOne({_id: post._id}, {'revenueGenerated': updatedRevenueGenerated})

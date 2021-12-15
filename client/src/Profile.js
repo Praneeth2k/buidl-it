@@ -53,6 +53,7 @@ function Profile() {
         const memeitContract = new ethers.Contract(memeitaddress, Memeit.abi, signer)
         await memeitContract.withdrawTokens(tokenaddress, signerAddress, revenueEarned)
         await axios.patch(`/user/withdrawAmount/`, {accountAddress: signerAddress,withdrawAmount: revenueEarned - alreadyWithdrawn})
+        getUserReveune()
     }
 
     async function saveUsername() {
@@ -70,22 +71,22 @@ function Profile() {
     }
 
     return (
-        <div class="ml-16 mt-10">
+        <div class="ml-16 mt-10 text-xl">
             <div>
-                <h1 class="font-bold text-blue-900"> Set username</h1>
+                <h1 class="font-bold"> Set username</h1>
                 <input
                     placeholder={username}
-                    className="mt-2 border rounded p-2"
+                    className="mt-2 border rounded p-2 dark:bg-gray-700"
                     onChange={e => setUsername(e.target.value)}
                 />
-                <button className= "bg-blue-500 ml-2 rounded p-1 text-white" onClick={saveUsername}>Save username</button>
+                <button className= "bg-blue-500 ml-2 rounded-lg p-1 text-white text-base" onClick={saveUsername}>Save username</button>
             </div>
-            <div class="mt-10">
-                <h1 class="font-bold text-blue-900">Withdraw tokens to your wallet</h1>
-                <h3 class="mt-2 font-mono">You have earned <span class="font-bold text-purple-900">{revenueEarned} BRO</span> Tokens so far</h3>
-                <h3 class="mt-1 font-mono">You have already withdrawn <span class="font-bold text-purple-900">{alreadyWithdrawn} BRO</span></h3>
-                <h3 class="mt-1 font-mono">Withdrawable: <span class="font-bold text-purple-900">{revenueEarned - alreadyWithdrawn}</span></h3>
-                <button onClick = {handleSubmit} className= "bg-red-500 rounded p-1 text-white mt-2">Withdraw {revenueEarned - alreadyWithdrawn}</button> 
+            <div class="mt-20 bg-gray-100 rounded w-max p-4 dark:bg-gray-800">
+                <h1 class="font-bold ">Withdraw tokens to your wallet</h1>
+                <h3 class="mt-2 font-mono">Earned: <span class="font-bold ">{revenueEarned} BRO</span></h3>
+                <h3 class="mt-1 font-mono">Withdrawn: <span class="font-bold ">{alreadyWithdrawn} BRO</span></h3>
+                <h3 class="mt-1 font-mono">Withdrawable: <span class="font-bold ">{revenueEarned - alreadyWithdrawn} BRO</span></h3>
+                <button onClick = {handleSubmit} className= "bg-red-500 rounded p-1 text-white mt-2 text-base">Withdraw {revenueEarned - alreadyWithdrawn}</button> 
             </div>
         </div>
     )

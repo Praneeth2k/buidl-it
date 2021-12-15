@@ -27,8 +27,12 @@ const postSchema = mongoose.Schema(
         revenueGenerated: {
             type: Map,
             of: Number
+        },
+        deleted: {
+            type: Boolean
         }
-})
+        
+}, {timestamps: true})
 
 const Post = mongoose.model('Post', postSchema);
 

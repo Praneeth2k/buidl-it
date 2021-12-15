@@ -4,6 +4,7 @@ import Meme from './Meme'
 import { ethers } from 'ethers'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
+import axiosInstance from './axios'
 
 import {nftaddress, memeitaddress} from './config'
 
@@ -31,22 +32,48 @@ function MyCollection() {
         const nftContract = new ethers.Contract(nftaddress, NFT.abi, provider)
         const data = await memeitContract.fetchMyNFTs()
 
+        const database = await axiosInstance.get('/post')
+        console.log(database)
+        
+        const dataItems = database.data.data.data
+
+        
+
         const memeItems = await Promise.all(data.map(async i => {
+            let _id
+            let likes
+            let views
+            let revenueShare
+
+            const memeId = i.memeId.toNumber()
+            dataItems.forEach((post) => {
+                if(post.memeId === memeId) {
+                    _id = post._id
+                    likes = post.likes
+                    views = post.views
+                    revenueShare = post.revenueGenerated
+                }
+            })
+            console.log("_id is ", _id)
             const tokenUri = await nftContract.tokenURI(i.tokenId)
-            console.log(tokenUri)
             const meta = await axios.get(tokenUri)
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-            
+            console.log(meta.data.image)
 
             let meme = {
+                _id,
                 user: meta.data.user,
                 price,
-                memeId: i.memeId.toNumber(),
+                memeId,
                 originalSeller:  i.originalSeller,
                 currentOwner: i.currentOwner,
                 image: meta.data.image,
                 title: meta.data.title,
-                percentageRevenue: i.percentageRevenueForCurrentOwner.toNumber()
+                percentageRevenue: i.percentageRevenueForCurrentOwner.toNumber(),
+                sold: i.sold,
+                likes,
+                views,
+                revenueShare
             }
 
             return meme
@@ -68,6 +95,8 @@ function MyCollection() {
         const price = ethers.utils.parseUnits(newPrice.toString(), 'ether')
         const transaction = await contract.sellNFT(nftaddress, nft.memeId, price)
         await transaction.wait()
+
+
         loadMemes()
     }
 
@@ -76,8 +105,8 @@ function MyCollection() {
 
 
     return (
-        <div class="m-auto mt-2 max-w-lg bg-green-500">
-            <h1 className="m-3">Memes you own</h1>
+        <div class="m-auto mt-0 max-w-lg border-2 border-t-0">
+            <h1 className="ml-2 pt-4">Memes you own</h1>
             {
                 memes.map((meme, i) => (<Meme meme={meme} sellNFT={sellNFT} option="3" key={i}/>))
             }

@@ -11,6 +11,7 @@ import {nftaddress, memeitaddress} from './config'
 import NFT from './artifacts/src/contracts/NFT.sol/NFT.json'
 import Memeit from './artifacts/src/contracts/Memeit.sol/Memeit.json'
 
+
 let rpcEndpoint = null
 
 if (process.env.REACT_APP_WORKSPACE_URL) {
@@ -20,11 +21,16 @@ if (process.env.REACT_APP_WORKSPACE_URL) {
 function Memes() {
     const [memes, setMemes] = useState([])
     const [loadingState, setLoadingState] = useState('not-loaded')
-    console.log(process.env)
+    const [time, setTime] = useState(Date.now());
+
 
     useEffect(() => {
         loadMemes() 
-    }, [])
+        const interval = setInterval(() => setTime(Date.now()), 10000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [time])
 
     async function loadMemes() {
         console.log(rpcEndpoint)
@@ -43,6 +49,7 @@ function Memes() {
             let _id
             let likes
             let views
+            let totalRevenue
             let revenueShare
 
             const memeId = i.memeId.toNumber()
@@ -51,6 +58,7 @@ function Memes() {
                     _id = post._id
                     likes = post.likes
                     views = post.views
+                    totalRevenue = post.totalRevenue
                     revenueShare = post.revenueGenerated
                 }
             })
@@ -73,6 +81,7 @@ function Memes() {
                 sold: i.sold,
                 likes,
                 views,
+                totalRevenue,
                 revenueShare
             }
 
@@ -98,7 +107,11 @@ function Memes() {
         const signerAddress = await signer.getAddress()
         console.log(nft._id)
 
-        await axiosInstance.patch(`/post/${nft._id}`, {currentOwner: signerAddress})
+        const update = JSON.stringify({
+            currentOwner: signerAddress
+        })
+
+        await axiosInstance.patch(`/post/${nft._id}`, update, {headers: {'Content-Type': 'application/json'}})
         loadMemes()
     }
 
@@ -106,18 +119,21 @@ function Memes() {
 
 
     return (
-        <div class=" mt-2 grid grid-cols-3 gap-4 text-white">
-            <div class= "max-w-xs ml-2" >
-                <img src="./ad1.png" alt="ad1"/>
-                <img class="mt-56" src="./ad2.jpeg" alt="ad2"/>
+        <div class="grid grid-cols-12 gap-0 dark:bg-black">
+            <div class= "ml-2  sticky col-span-3 " >
+                <img class="mt-20 max-w-xs" src="./ad1.png" alt="ad1"/>
+                <img class="mt-56 max-w-xs" src="./ad2.jpeg" alt="ad2"/>
             </div>
-            <div class="m-auto bg-blue-500">
-                {
-                    memes.map((meme, i) => (<Meme meme={meme} buyNFT={buyNFT} option="1" key={i}/>))
-                }
+            <div class="m-auto col-span-6">
+                <div class=" border-gray-200 border-2 border-t-0 max-w-2xl">
+                    {
+                        memes.map((meme, i) => (<Meme meme={meme} buyNFT={buyNFT} option="1" key={i}/>))
+                    }
+
+                </div>
             </div>
-            <div class=" max-w-xs ml-16">
-                <img class="mr-0" src="./ad3.png" alt="ad3"/>
+            <div class="col-span-3 ">
+                <img class="mt-20 max-w-xs m-auto" src="./ad3.png" alt="ad3"/>
             </div>
         </div>
     )
