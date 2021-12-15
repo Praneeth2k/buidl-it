@@ -4,7 +4,7 @@ let privateKey
 if(process.env.NODE_ENV === 'development'){
   privateKey = fs.readFileSync(".secret").toString()
 } else {
-  privateKey = process.env.REACT_APP_DEPLOYER_SECRET_KEY
+  privateKey = ""
 }
 
 
