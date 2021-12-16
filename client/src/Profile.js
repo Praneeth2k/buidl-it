@@ -86,7 +86,10 @@ function Profile() {
                 <h3 class="mt-2 font-mono">Earned: <span class="font-bold ">{revenueEarned} BRO</span></h3>
                 <h3 class="mt-1 font-mono">Withdrawn: <span class="font-bold ">{alreadyWithdrawn} BRO</span></h3>
                 <h3 class="mt-1 font-mono">Withdrawable: <span class="font-bold ">{revenueEarned - alreadyWithdrawn} BRO</span></h3>
-                <button onClick = {handleSubmit} className= "bg-red-500 rounded p-1 text-white mt-2 text-base">Withdraw {revenueEarned - alreadyWithdrawn}</button> 
+                <button onClick = {handleSubmit} className= "bg-red-500 rounded p-1 text-white mt-2 text-base">Withdraw {revenueEarned - alreadyWithdrawn}</button>
+                
+                <h2 class='mt-3'>BRO Token contract: <a class="text-blue-600" target="_blank" href="https://mumbai.polygonscan.com/address/0x6B0a341F7Ae03908C432941E886d1E7c218A9B4E">https://mumbai.polygonscan.com/address/0x6B0a341F7Ae03908C432941E886d1E7c218A9B4E</a></h2>
+                <h2>Import this token address in your wallet to check if you recieved the tokens: 0x6B0a341F7Ae03908C432941E886d1E7c218A9B4E</h2>
             </div>
         </div>
     )
