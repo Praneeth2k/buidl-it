@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 import {
-    nftaddress, memeitaddress
+    nftaddress, memeitaddress, tokenaddress
 } from './config'
 
 import NFT from './artifacts/src/contracts/NFT.sol/NFT.json'
@@ -50,6 +50,8 @@ function CreateMeme() {
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
         const { title, price, revenueShare } = formInput
+        
+
         if(!title || !price || !revenueShare) {
             setError("Enter all fields")
             return
@@ -79,6 +81,7 @@ function CreateMeme() {
 
         setProcessing1("true")
         const signerAddress = await signer.getAddress()
+        console.log("signerAddress", signerAddress)
 
         const data = JSON.stringify({
             user: signerAddress, title, price, revenueShare: formInput.revenueShare, image: fileUrl
@@ -103,15 +106,19 @@ function CreateMeme() {
         // const provider = new ethers.providers.Web3Provider(connection)
         // const signer = provider.getSigner()
 
+        console.log("nftAdd:", nftaddress)
+
         let contract= new ethers.Contract(nftaddress, NFT.abi, signer)
         let transaction = await contract.createToken(url)
         let tx = await transaction.wait()
-        setProcessing1("done")
-        setProcessing2("true")
+        console.log(tx)
         
         let event = tx.events[0]
         let value = event.args[2]
         let tokenId = value.toNumber()
+
+        setProcessing1("done")
+        setProcessing2("true")
 
         let price = ethers.utils.parseUnits(formInput.price, 'ether')
 
@@ -128,6 +135,7 @@ function CreateMeme() {
         value = event.args.memeId
         const memeId = value.toNumber()
         const signerAddress = await signer.getAddress()
+
         const post = JSON.stringify({
             memeId,
             likes: 0,

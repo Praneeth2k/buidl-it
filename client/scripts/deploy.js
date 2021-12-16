@@ -3,7 +3,12 @@ const hre = require("hardhat")
 async function main() {
     const Memeit = await hre.ethers.getContractFactory("Memeit");
     const memeit = await Memeit.deploy();
-    await memeit.deployed();
+    try{
+
+      await memeit.deployed();
+    } catch(e){
+      console.log(e)
+    }
     console.log("Memeit deployed to:", memeit.address);
 
     const NFT = await hre.ethers.getContractFactory("NFT");

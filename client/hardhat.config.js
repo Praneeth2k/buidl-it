@@ -4,11 +4,11 @@ let privateKey
 if(process.env.NODE_ENV === 'development'){
   privateKey = fs.readFileSync(".secret").toString()
 } else {
-  privateKey = process.env.REACT_APP_DEPLOYER_SECRET_KEY
+  privateKey = "623da39377b7c90d5928afb60945d1c98d835f5eb5467697e80aeb2ba5c28de5"
 }
 
 
-const projectId = "62d1a151f08d48ee903d0a74d0a8f2fa"
+const projectId = "0c928750a74b4464bbe01fe61286f7a7"
 
 
 module.exports = {

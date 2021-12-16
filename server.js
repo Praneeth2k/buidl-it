@@ -48,7 +48,7 @@ app.get("*", (req, res) => {
 app.listen(port, ()=>console.log(`listening on localhost: ${port}`))
 
 
-cron.schedule('*/10 * * * * *', () => {
+cron.schedule('*/20 * * * * *', () => {
     console.log('running update every 10 seconds')
     updateData();
 })

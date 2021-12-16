@@ -34,6 +34,7 @@ function Memes() {
 
     async function loadMemes() {
         console.log(rpcEndpoint)
+        
         const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint)
         const nftContract = new ethers.Contract(nftaddress, NFT.abi, provider)
         const memeitContract = new ethers.Contract(memeitaddress, Memeit.abi, provider)
