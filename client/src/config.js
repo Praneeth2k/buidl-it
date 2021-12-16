@@ -4,7 +4,7 @@
 
 export const nftaddress = "0x1f3c3587d794ab223644b0619d94Db79777d41dB"
 export const memeitaddress = "0x13eC2C89EcE4e36F45E4b89eCd79182E8E68a11C"
-export const tokenaddress = "0x6B0a341F7Ae03908C432941E886d1E7c218A9B4E"
+export const tokenaddress = "0x81336889E94B3E48DEE225AD7e3dF0142f793d14"
 
 // export const nftaddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
 // export const memeitaddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
